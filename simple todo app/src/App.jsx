@@ -3,6 +3,10 @@ import { useState } from "react";
 function App() {
   let [input, setInput] = useState("");
   let [array, setArray] = useState([]);
+  let [isEditing, setisEditing ] = useState(false);
+  let [editIndex, seteditIndex ] = useState();
+
+
 
   const addTodo = () => {
     let newArray = [...array];
@@ -16,18 +20,20 @@ function App() {
     newArray.splice(index, 1);
     setArray(newArray);
   };
-  const editTodo = (index) => {
-    let newArray = [...array];
-    setInput(newArray[index])
-      setArray(newArray); 
-  };
-  const updateTodo =(index,input) => {
-    console.log("update value prsessed")
-    let promptValue = input;
-    let newArray = [...array];
-    newArray[index] = promptValue;
-    setArray(newArray);
-console.log("update value finnished")
+ const editTodo = (index) => {
+  let newArray = [...array]
+setInput(newArray[index])
+setArray(newArray)
+seteditIndex(index)
+setisEditing(true)
+ } 
+  
+  const updateTodo =() => {
+    let cloneArray = [...array];
+    cloneArray[editIndex] = input;
+    setArray(cloneArray);
+    setisEditing(false)
+    setInput('')
   }
 
 
@@ -41,11 +47,10 @@ console.log("update value finnished")
           setInput(e.target.value);
         }}
       />
-
-      <button onClick={addTodo}>add task</button>
-      <button onClick={updateTodo}>update task</button>
-
-      
+{ isEditing ? (<button onClick={updateTodo}>update task</button>
+      )
+      :(<button onClick={addTodo}>add task</button>)
+      }
       <ul>
         {array.map((value, index) => {
           return (
